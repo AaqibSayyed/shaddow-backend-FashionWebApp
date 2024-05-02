@@ -65,7 +65,6 @@ const getAllOrders =  catchAsyncErrors(async(req, res, next)=>{
 //delete order  -- admin
 const deleteOrder = catchAsyncErrors(async(req, res, next)=>{
     const order = await Order.findByIdAndDelete(req.params.id)
-    console.log('roder', order)
     if(!order){
         return next(new ErrorHandler(404, 'Order not found'))
     }

@@ -22,7 +22,6 @@ module.exports = (err,req,res,next)=>{
         err = new ErrorHandler(400, message)
       }
 
-    console.log(err)
     
     res.status(err.statusCode).json({
         success: false, 

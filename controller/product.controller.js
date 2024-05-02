@@ -20,7 +20,7 @@ const getAllProducts = catchAsyncErrors(async(req, res, next)=>{
     if(!product) {
         return next(new ErrorHandler(404, 'Product not found'))
     }
-    
+
     return res.status(200).json({success: true, data: product, productCount})
 })
 
@@ -64,7 +64,6 @@ const deleteProduct = catchAsyncErrors(async (req,res, next)=>{
 //create or update review 
 
 const createOrUpdateReview = catchAsyncErrors(async(req, res, next)=>{
-    console.log('yaha aaya kya')
     const {rating, comment, productId} = req.body
 
     const user_review = {
