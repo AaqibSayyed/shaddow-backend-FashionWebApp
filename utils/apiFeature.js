@@ -18,7 +18,12 @@ class ApiFeature{
     }
 
     filter(){
-        const queryFilter = {...this.queryString} 
+        let queryFilter = {...this.queryString }
+
+        if(queryFilter.subCategory){
+            const subCategoryArray = queryFilter.subCategory['in'].split(',')
+            queryFilter = {...queryFilter, subCategory: {...queryFilter.subCategor, in : subCategoryArray } }
+        }
 
         let removeParam = ['keyword', 'page', 'limit']
 
@@ -27,23 +32,27 @@ class ApiFeature{
         })
 
         let queryStr = JSON.stringify(queryFilter)
-        queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`)
+        
+        queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, (key) => `$${key}`)
         queryStr = JSON.parse(queryStr)
+        
         this.query = this.query.find({...queryStr})
-
+        
         return this
         
     }
 
     pagination(){
-        const productPerPage = 10
+        const productPerPage = 6
         const page = Number(this.queryString.page) || 1
         const skip = productPerPage * (page - 1)
 
         this.query = this.query.find().limit(productPerPage).skip(skip)
-
-        return this
+        return  this
     }
 }
 
 module.exports = ApiFeature
+
+
+

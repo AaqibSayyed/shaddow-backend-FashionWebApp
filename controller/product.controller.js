@@ -14,14 +14,20 @@ const createProduct = catchAsyncErrors(async (req, res, next) =>{
 //getAllProducts
 const getAllProducts = catchAsyncErrors(async(req, res, next)=>{
     let productCount = await Product.countDocuments()
-    let apiFeature = new ApiFeature(Product, req.query).search().filter().pagination()
-    let product = await apiFeature.query
+   
+    let apiFeature = new ApiFeature(Product, req.query).search().filter()
+    let products = await apiFeature.query
+    const filteredSearchCount = products.length || 0
 
-    if(!product) {
+
+    let apiFeaturePagination = new ApiFeature(Product, req.query).search().filter().pagination()
+    let product = await apiFeaturePagination.query
+
+    if(!product || !products) {
         return next(new ErrorHandler(404, 'Product not found'))
     }
 
-    return res.status(200).json({success: true, data: product, productCount})
+    return res.status(200).json({success: true, data: product, productCount, filteredSearchCount })
 })
 
 //getSingleProduct
